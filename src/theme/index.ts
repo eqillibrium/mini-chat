@@ -1,5 +1,4 @@
-import { createTheme, Theme } from '@mui/material/styles'
-import { makeStyles, createStyles} from '@mui/styles'
+import { createTheme } from '@mui/material/styles'
 
 const theme = createTheme({
   palette: {
@@ -11,11 +10,5 @@ const theme = createTheme({
     },
   },
 });
-
-// const useStyles = makeStyles((theme: Theme) => createStyles({
-//   header: {
-//     backgroundColor: theme.palette.primary.main
-//   }
-// }));
 
 export { theme }

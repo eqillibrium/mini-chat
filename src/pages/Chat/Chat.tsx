@@ -1,28 +1,34 @@
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import { Card } from '@mui/material'
+import { Card, Grid, Container, Typography } from '@mui/material'
 import { ChatList, ChatSection } from '../../components'
-
-const Item = styled(Card)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+import { useContext } from 'react'
+import { AppContext } from '../../context/App.context'
 
 export const Chat = (): JSX.Element => {
+  const { name } = useContext(AppContext)
+
+  if(!name) {
+    return (
+      <Container maxWidth="sm">
+        <Typography
+          component="h1"
+          variant="h2"
+          align="center"
+          color="text.primary"
+          gutterBottom
+        >
+          Please, log in
+        </Typography>
+      </Container>
+    );
+  }
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} component={'section'}>
         <Grid item xs={4}>
-          <Item>{<ChatList />}</Item>
+          <Card>{<ChatList />}</Card>
         </Grid>
         <Grid item xs={8}>
           <ChatSection />
         </Grid>
       </Grid>
-    </Box>
   );
 }

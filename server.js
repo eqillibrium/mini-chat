@@ -5,21 +5,22 @@ const wss = new WebSocketServer({
 }, () => console.log(`Server started on 5000`))
 
 wss.on('connection', function connection(ws) {
-    ws.on('message', function (message) {
-        message = JSON.parse(message)
-        switch (message.event) {
+    ws.on('message', function (payload) {
+        payload = JSON.parse(payload)
+        switch (payload.event) {
             case 'message':
-                broadcastMessage(message)
+                broadcastMessage({...payload, id: Math.random() * 1000, createdAt: new Date().toLocaleString() })
                 break;
             case 'connection':
-                broadcastMessage(message)
+                console.log('connection')
+                broadcastMessage(payload)
                 break;
         }
     })
 })
 
-function broadcastMessage(message, id) {
+function broadcastMessage(payload, id) {
     wss.clients.forEach(client => {
-        client.send(JSON.stringify(message))
+        client.send(JSON.stringify(payload))
     })
 }

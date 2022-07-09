@@ -1,4 +1,5 @@
 import { FormEvent } from 'React'
+import { AppContext } from '../../context/App.context'
 import {
   Avatar,
   Button,
@@ -9,19 +10,61 @@ import {
   Container
 } from '@mui/material'
 import { LockOutlined } from '@mui/icons-material'
+import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+interface userData {
+  UID: number;
+  name: FormDataEntryValue | null | string;
+  event: 'message' | 'connection';
+}
 
 export const Auth = () => {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const { name, setName, socket, setSocket, setConnected, setUID } = useContext(AppContext)
+  const navigate = useNavigate()
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    if (setName) {
+      setName(data.get('name'))
+    }
+    if (setSocket && !socket) {
+      const newSocket = new WebSocket('ws://localhost:5000')
+      setSocket(newSocket)
+      newSocket.onopen = (e: Event): void => {
+        const UID = Math.random() * 1000
+        setUID && setUID(UID)
+        const body: userData = { UID, name: data.get('name'), event: 'connection' }
+        newSocket.send(JSON.stringify(body))
+      }
+      newSocket.onmessage = (e: MessageEvent): void => {
+        const data = JSON.parse(e.data)
+        if(data.event === 'connection') {
+          setConnected && setConnected()
+          navigate('/chat')
+        }
+      }
+    }
   };
 
+  if(name) {
+    return (
+      <Container maxWidth="sm">
+        <Typography
+          component="h1"
+          variant="h2"
+          align="center"
+          color="text.primary"
+          gutterBottom
+        >
+          {name && String(name)}
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
-      <Container component="main" maxWidth="xs">
+      <Container maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
@@ -42,21 +85,11 @@ export const Auth = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="name"
+              label="Your name"
+              name="name"
+              autoComplete="name"
               autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
             />
             <Button
               type="submit"

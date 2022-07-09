@@ -1,7 +1,8 @@
-import { SyntheticEvent, useState, MouseEvent } from 'react';
+import { SyntheticEvent, useState, MouseEvent, useContext } from 'react';
 import { Tab, TabProps, Tabs } from '@mui/material'
 import { Home, Chat, Person } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../../context/App.context'
 
 interface LinkTabProps extends TabProps{
   label?: string;
@@ -26,6 +27,7 @@ const LinkTab = (props: LinkTabProps) => {
 }
 
 export const Nav = () => {
+    const { name } = useContext(AppContext)
     const [value, setValue] = useState(0);
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -40,12 +42,9 @@ export const Nav = () => {
           textColor="secondary"
           indicatorColor="secondary"
         >
-            <LinkTab aria-label="favorite" icon={<Home />} iconPosition="end" label={'Home'} href={'/'}/>
+          <LinkTab aria-label="favorite" icon={<Home />} iconPosition="end" label={'Home'} href={'/'}/>
           <LinkTab aria-label="favorite" icon={<Chat />} iconPosition="end" label={'Chat'} href={'/chat'}/>
-          <LinkTab aria-label="favorite" icon={<Person />} iconPosition="end" label={'Login'} href={'/auth'}/>
-          {/*<Tab icon={<PhoneIcon />} aria-label="phone"/>*/}
-          {/*<Tab icon={<FavoriteIcon />} aria-label="favorite" href={'/'}/>*/}
-          {/*<Tab icon={<PersonPinIcon />} aria-label="person" href={'/chat'}/>*/}
+          <LinkTab aria-label="favorite" icon={<Person />} iconPosition="end" label={name ? String(name) : 'Login'} href={'/auth'}/>
         </Tabs>
     );
 };
