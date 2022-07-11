@@ -1,9 +1,19 @@
 import { ThemeProvider } from '@mui/material/styles'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { Home, Chat, Auth, NotFound } from './pages'
 import { Layout } from './layout/Layout'
 import { theme } from './theme'
-import { AppContextProvider } from './context/App.context'
+import { AppContext, AppContextProvider } from './context/App.context'
+import { ReactElement, useContext } from 'react'
+
+interface PrivateRouteProps {
+  children: ReactElement
+}
+
+const PrivateRoute = ({ children }: PrivateRouteProps): JSX.Element => {
+  const { userID } = useContext(AppContext);
+  return userID ? children : <Navigate to="/auth" />;
+}
 
 function App() {
 
@@ -23,7 +33,7 @@ function App() {
             />
             <Route
               path="/chat"
-              element={<Chat />}
+              element={<PrivateRoute><Chat /></PrivateRoute>}
             />
             <Route
               path="/auth"

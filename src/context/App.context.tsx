@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useState } from 'react'
 
-interface IMessage {
+export interface IMessage {
   id: number,
   authorID: number,
   text: string,
@@ -16,7 +16,7 @@ export interface IAppContext {
   setSocket?: (socket: WebSocket | null) => void
   connected?: boolean,
   setConnected?: () => void
-  messages?: IMessage[],
+  messages?: IMessage[] | [],
   setMessages?: (message: IMessage) => void,
 }
 
