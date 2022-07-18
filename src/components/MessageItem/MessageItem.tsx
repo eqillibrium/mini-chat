@@ -1,5 +1,4 @@
 import { ListItem, ListItemText } from '@mui/material'
-import { IMessage } from '../../context/App.context'
 import { useStyles } from './Message.styles'
 import { MessageItemProps } from './MessageItem.props'
 

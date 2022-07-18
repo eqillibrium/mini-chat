@@ -1,8 +1,9 @@
-import { SyntheticEvent, useState, MouseEvent, useContext } from 'react';
+import { SyntheticEvent, useState, MouseEvent } from 'react';
 import { Tab, TabProps, Tabs } from '@mui/material'
 import { Home, Chat, Person } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { AppContext } from '../../context/App.context'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 
 interface LinkTabProps extends TabProps{
   label?: string;
@@ -28,7 +29,7 @@ const LinkTab = (props: LinkTabProps) => {
 
 export const Nav = () => {
   const routes = ['/', '/chat', '/auth']
-  const { name } = useContext(AppContext)
+  const userName = useSelector((state: RootState) => state.user.name)
   const { pathname } = useLocation()
   const [value, setValue] = useState(routes.indexOf(pathname));
 
@@ -46,7 +47,7 @@ export const Nav = () => {
       >
         <LinkTab aria-label="favorite" icon={<Home />} iconPosition="end" label={'Home'} href={'/'}/>
         <LinkTab aria-label="favorite" icon={<Chat />} iconPosition="end" label={'Chat'} href={'/chat'}/>
-        <LinkTab aria-label="favorite" icon={<Person />} iconPosition="end" label={name ? String(name) : 'Login'} href={'/auth'}/>
+        <LinkTab aria-label="favorite" icon={<Person />} iconPosition="end" label={userName ? String(userName) : 'Login'} href={'/auth'}/>
       </Tabs>
     );
 };

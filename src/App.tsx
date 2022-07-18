@@ -3,16 +3,17 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Home, Chat, Auth, NotFound } from './pages'
 import { Layout } from './layout/Layout'
 import { theme } from './theme'
-import { AppContext, AppContextProvider } from './context/App.context'
-import { ReactElement, useContext } from 'react'
+import { ReactElement } from 'react'
+import { RootState, store } from './store'
+import { Provider, useSelector } from 'react-redux'
 
 interface PrivateRouteProps {
   children: ReactElement
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps): JSX.Element => {
-  const { userID } = useContext(AppContext);
-  return userID ? children : <Navigate to="/auth" />;
+  const UID = useSelector((state: RootState) => state.user.UID)
+  return UID ? children : <Navigate to="/auth" />;
 }
 
 function App() {
@@ -20,32 +21,32 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <AppContextProvider>
-        <Routes>
-          <Route
-            path="/"
-            // @ts-ignore
-            element={<Layout />}
-          >
+        <Provider store={store}>
+          <Routes>
             <Route
-              index
-              element={<Home />}
-            />
-            <Route
-              path="/chat"
-              element={<PrivateRoute><Chat /></PrivateRoute>}
-            />
-            <Route
-              path="/auth"
-              element={<Auth />}
-            />
-            <Route
-              path={'*'}
-              element={<NotFound />}
-            />
-          </Route>
-        </Routes>
-        </AppContextProvider>
+              path="/"
+              // @ts-ignore
+              element={<Layout />}
+            >
+              <Route
+                index
+                element={<Home />}
+              />
+              <Route
+                path="/chat"
+                element={<PrivateRoute><Chat /></PrivateRoute>}
+              />
+              <Route
+                path="/auth"
+                element={<Auth />}
+              />
+              <Route
+                path={'*'}
+                element={<NotFound />}
+              />
+            </Route>
+          </Routes>
+        </Provider>
       </ThemeProvider>
     </>
     );

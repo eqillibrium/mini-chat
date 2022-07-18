@@ -1,5 +1,4 @@
 import { FormEvent } from 'React'
-import { AppContext } from '../../context/App.context'
 import {
   Avatar,
   Button,
@@ -10,8 +9,11 @@ import {
   Container
 } from '@mui/material'
 import { LockOutlined } from '@mui/icons-material'
-import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../store'
+import { setName, setUID } from '../../features/user/userSlice'
+import socket from '../../socket'
 
 interface userData {
   UID: number;
@@ -20,34 +22,32 @@ interface userData {
 }
 
 export const Auth = () => {
-  const { name, setName, socket, setSocket, setConnected, setUID } = useContext(AppContext)
+  const userName = useSelector((state: RootState) => state.user.name)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (setName) {
-      setName(data.get('name'))
+    const name = String(data.get('name'))
+    if (!name) {
+      return;
     }
-    if (setSocket && !socket) {
-      const newSocket = new WebSocket('ws://localhost:5000')
-      setSocket(newSocket)
-      newSocket.onopen = (e: Event): void => {
-        const UID = Math.random() * 1000
-        setUID && setUID(UID)
-        const body: userData = { UID, name: data.get('name'), event: 'connection' }
-        newSocket.send(JSON.stringify(body))
-      }
-      newSocket.onmessage = (e: MessageEvent): void => {
-        const data = JSON.parse(e.data)
-        if(data.event === 'connection') {
-          setConnected && setConnected()
-          navigate('/chat')
-        }
+    dispatch(setName(name));
+    const UID = Math.random() * 1000
+    dispatch(setUID(UID))
+    const body: userData = { UID, name, event: 'connection' }
+    socket.send(JSON.stringify(body))
+
+    socket.onmessage = (e: MessageEvent): void => {
+      const data = JSON.parse(e.data)
+      if(data.event === 'connection') {
+        navigate('/chat')
       }
     }
+
   };
 
-  if(name) {
+  if(userName) {
     return (
       <Container maxWidth="sm">
         <Typography
@@ -57,7 +57,7 @@ export const Auth = () => {
           color="text.primary"
           gutterBottom
         >
-          {name && String(name)}
+          {userName && String(userName)}
         </Typography>
       </Container>
     );

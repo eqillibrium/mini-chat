@@ -2,11 +2,13 @@ import { Card, Grid, Container, Typography } from '@mui/material'
 import { ChatList, ChatSection } from '../../components'
 import { useContext } from 'react'
 import { AppContext } from '../../context/App.context'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
 
 export const Chat = (): JSX.Element => {
-  const { name } = useContext(AppContext)
+  const userName = useSelector((state: RootState) => state.user.name)
 
-  if(!name) {
+  if(!userName) {
     return (
       <Container maxWidth="sm">
         <Typography
@@ -21,12 +23,14 @@ export const Chat = (): JSX.Element => {
       </Container>
     );
   }
+
   return (
       <Grid container spacing={2} component={'section'}>
         <Grid item xs={4}>
           <Card>{<ChatList />}</Card>
         </Grid>
         <Grid item xs={8}>
+          {/*// @ts-ignore*/}
           <ChatSection />
         </Grid>
       </Grid>

@@ -1,6 +1,6 @@
-import { IMessage } from '../../context/App.context'
+import { IMessage } from '../../interfaces'
 
 export interface MessageItemProps {
   userID: number | undefined,
-  message:IMessage
+  message: IMessage
 }
