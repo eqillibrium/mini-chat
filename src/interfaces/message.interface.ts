@@ -1,6 +1,6 @@
 export interface IMessage {
-  id?: number,
-  authorID: number,
+  id?: string,
+  authorID: string,
   text?: string,
   event?: 'connection' | 'message'
   createdAt?: ''

@@ -1,12 +1,16 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface IUser {
-  UID?: number,
-  name?: FormDataEntryValue | null | string,
+  _id?: string,
+  name?: string,
+  email?: string,
+  access_token: string,
   createdAt?: '',
 }
 
 export interface IUserReducers {
+  set_id: (state: IUser, action: PayloadAction<string>) => void
   setName: (state: IUser, action: PayloadAction<string>) => void
-  setUID: (state: IUser, action: PayloadAction<number>) => void
+  setEmail: (state: IUser, action: PayloadAction<string>) => void
+  setaccess_token: (state: IUser, action: PayloadAction<string>) => void
 }

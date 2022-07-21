@@ -3,24 +3,31 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { IUser, IUserReducers } from '../../interfaces'
 
 const initialState: IUser = {
-  UID: 0,
+  _id: '',
   name: '',
+  email: '',
+  access_token: ''
 }
 
-export const userSlice: Slice<IUser, Pick<IUserReducers, 'setName' | 'setUID'>, string> = createSlice({
+export const userSlice: Slice<IUser, Pick<IUserReducers, 'setName' | 'set_id' | 'setEmail' | 'setaccess_token'>, string> = createSlice({
   name: 'user',
   initialState,
   reducers: {
     setName(state: Draft<IUser>, action:PayloadAction<string>) {
       state.name = action.payload
     },
-    setUID(state: Draft<IUser>, action:PayloadAction<number>) {
-      state.UID = action.payload
+    set_id(state: Draft<IUser>, action:PayloadAction<string>) {
+      state._id = action.payload
+    },
+    setEmail(state: Draft<IUser>, action:PayloadAction<string>) {
+      state.email = action.payload
+    },
+    setaccess_token(state: Draft<IUser>, action:PayloadAction<string>) {
+      state.access_token = action.payload
     }
   },
 })
 
-// Action creators are generated for each case reducer function
-export const { setName, setUID } = userSlice.actions
+export const { setName, set_id, setEmail, setaccess_token } = userSlice.actions
 
 export default userSlice.reducer

@@ -20,13 +20,13 @@ import { addMessages } from '../../features/chat/chatSlice'
 export const ChatSection = () => {
   const dispatch = useDispatch()
   const [value, setValue] = useState<string>('');
-  const UID = useSelector((state: RootState) => state.user.UID)
+  const _id = useSelector((state: RootState) => state.user._id)
   const messages = useSelector((state: RootState) => state.chat.messages)
-  if (!UID) {
+  if (!_id) {
     return;
   }
   const handleClick = () => {
-    const newMessage: IMessage = { event: 'message', text: value, authorID: UID }
+    const newMessage: IMessage = { event: 'message', text: value, authorID: _id }
     socket.send(JSON.stringify(newMessage))
     setValue('')
   }
@@ -53,7 +53,7 @@ export const ChatSection = () => {
       <CardContent>
         {messages && messages.length
         ? (<MessageList>
-            {messages.map(message => (<MessageItem userID={UID} message={message} key={message.id} />))}
+            {messages.map(message => (<MessageItem userID={_id} message={message} key={message.id} />))}
           </MessageList>)
         : (<MessageList><div>None</div></MessageList>)
         }

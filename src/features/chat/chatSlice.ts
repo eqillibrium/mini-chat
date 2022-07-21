@@ -10,7 +10,7 @@ const initialState: IChat = {
 }
 
 export const chatSlice: Slice<IChat, Pick<IChatReducers, 'addUsers' | 'addMessages'>, string> = createSlice({
-  name: 'counter',
+  name: 'chat',
   initialState,
   reducers: {
     addUsers (state: Draft<IChat>, action: PayloadAction<IUser>) {

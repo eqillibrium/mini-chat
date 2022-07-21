@@ -1,6 +1,6 @@
 import { IMessage } from '../../interfaces'
 
 export interface MessageItemProps {
-  userID: number | undefined,
+  userID: string | undefined,
   message: IMessage
 }
