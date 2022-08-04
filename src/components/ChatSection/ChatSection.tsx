@@ -11,32 +11,27 @@ import { Send } from '@mui/icons-material'
 import { ChangeEvent, useState } from 'react'
 import { MessageItem } from '../MessageItem/MessageItem'
 import { MessageList } from '../MessageList/MessageList'
-import socket from '../../socket'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { IMessage } from '../../interfaces'
-import { addMessages } from '../../features/chat/chatSlice'
+import socket from '../../socket'
 
-export const ChatSection = () => {
-  const dispatch = useDispatch()
+export const ChatSection = (): JSX.Element | null => {
   const [value, setValue] = useState<string>('');
-  const _id = useSelector((state: RootState) => state.user._id)
+  const _id = useSelector((state: RootState) => state.user.profile._id)
   const messages = useSelector((state: RootState) => state.chat.messages)
   if (!_id) {
-    return;
+    return null;
   }
-  const handleClick = () => {
-    const newMessage: IMessage = { event: 'message', text: value, authorID: _id }
-    socket.send(JSON.stringify(newMessage))
-    setValue('')
-  }
-
-  socket.onmessage = (e: MessageEvent) => {
-      const newMessageData = JSON.parse(e.data)
-      if(newMessageData.event === 'message') {
-        dispatch(addMessages({ id: newMessageData.id, text: newMessageData.text, authorID: newMessageData.authorID, createdAt: newMessageData.createdAt }))
-      }
+  const handleClick = async () => {
+    const newMessage: IMessage = {
+      event: 'message',
+      text: value,
+      authorID:_id,
+      id: String(Math.random() * 10000).split(',').join()
     }
+    socket.emit('message', newMessage)
+  }
 
   return (
     <Card>

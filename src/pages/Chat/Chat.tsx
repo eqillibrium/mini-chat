@@ -1,12 +1,10 @@
 import { Card, Grid, Container, Typography } from '@mui/material'
 import { ChatList, ChatSection } from '../../components'
-import { useContext } from 'react'
-import { AppContext } from '../../context/App.context'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 
 export const Chat = (): JSX.Element => {
-  const userName = useSelector((state: RootState) => state.user.name)
+  const userName = useSelector((state: RootState) => state.user.profile.name)
 
   if(!userName) {
     return (
@@ -30,7 +28,6 @@ export const Chat = (): JSX.Element => {
           <Card>{<ChatList />}</Card>
         </Grid>
         <Grid item xs={8}>
-          {/*// @ts-ignore*/}
           <ChatSection />
         </Grid>
       </Grid>

@@ -7,10 +7,15 @@ export interface IChat {
   title?: string,
   messages?: IMessage[],
   users?: IUser[],
-  createdAt?: string
+  createdAt?: string,
+  isEstablishingConnection: boolean,
+  isConnected: boolean
 }
 
 export interface IChatReducers {
-  addUsers: (state: IChat, action: PayloadAction<IUser>) => void
-  addMessages: (state: IChat, action: PayloadAction<IMessage>) => void
+  addUser: (state: IChat, action: PayloadAction<IUser>) => void
+  onMessage: (state: IChat, action: PayloadAction<IMessage>) => void
+  startConnecting: (state: IChat) => void
+  connectionEstablished: (state: IChat) => void
+  disconnect: (state: IChat) => void
 }

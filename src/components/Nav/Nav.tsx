@@ -29,7 +29,7 @@ const LinkTab = (props: LinkTabProps) => {
 
 export const Nav = () => {
   const routes = ['/', '/chat', '/auth']
-  const userName = useSelector((state: RootState) => state.user.name)
+  const userName = useSelector((state: RootState) => state.user.profile.name)
   const { pathname } = useLocation()
   const [value, setValue] = useState(routes.indexOf(pathname));
 

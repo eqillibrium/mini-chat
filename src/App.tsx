@@ -12,7 +12,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps): JSX.Element => {
-  const _id = useSelector((state: RootState) => state.user._id)
+  const _id = useSelector((state: RootState) => state.user.profile._id)
   return _id ? children : <Navigate to="/auth" />;
 }
 
